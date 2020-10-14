@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
+import { Link, Redirect } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const Signup = () => {
@@ -26,8 +27,11 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-      return setError("Password do not match");
+    if (passwordRef.current.value.length < 7) {
+      if (passwordRef.current.value !== passwordConfirmRef.current.value) {
+        return setError("Password do not match");
+      }
+      return setError("Password Should be greater than 6 characters");
     }
 
     try {
@@ -44,7 +48,7 @@ const Signup = () => {
       <Card>
         <Card.Body>
           <h2 className="text-center mb-4">Sign Up</h2>
-          {currentUser?.email}
+          {currentUser?.email && <Redirect to="/login"></Redirect>}
           {error && <Alert variant="danger">{error}</Alert>}
           <Form onSubmit={handleSubmit}>
             <Form.Group id="email">
@@ -67,7 +71,7 @@ const Signup = () => {
       </Card>
       <div className="w-100 text-center mt-2">
         Already have an account?
-        {/* <Link to="/login">Log In</Link> */}
+        <Link to="/login"> Login</Link>
       </div>
     </Fragment>
   );
